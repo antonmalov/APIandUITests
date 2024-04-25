@@ -26,7 +26,7 @@ public class UsersTests {
 
     @Test
     public void getSingleUserTest() {
-        Integer userId = (Integer) 2;
+        Integer userId = 2;
         given().pathParam("userId", userId)
                 .get("https://fakestoreapi.com/users/{userId}")
                 .then()
@@ -39,7 +39,7 @@ public class UsersTests {
     @Test
     public void getAllUsersWithLimitTest() {
         int limitSize = 3;
-        given().queryParam("limit", Collections.singleton(limitSize))
+        given().queryParam("limit", limitSize)
                 .get("https://fakestoreapi.com/users")
                 .then().log().all()
                 .statusCode(200)
