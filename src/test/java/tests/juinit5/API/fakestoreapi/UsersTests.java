@@ -7,9 +7,7 @@ import models.fakeapiuser.Geolocation;
 import models.fakeapiuser.Name;
 import models.fakeapiuser.UserRoot;
 import org.junit.jupiter.api.Test;
-
 import java.util.*;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
