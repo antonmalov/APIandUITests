@@ -96,9 +96,41 @@ public class UsersTests {
                 .then().log().all()
                 .statusCode(200)
                 .body("id", notNullValue());
+    }
+
+    private UserRoot getTestUser() {
+        Name name = new Name("Anton", "Malov");
+        Geolocation geolocation = new Geolocation("-45.4532", "34.2345");
+        Address address = Address.builder()
+                .geolocation(geolocation)
+                .city("Moscow")
+                .street("street")
+                .number(4556)
+                .zipcode("12345-2365")
+                .build();
+
+        return UserRoot.builder()
+                .address(address)
+                .email("some@email")
+                .username("ant")
+                .password("somePass")
+                .name(name)
+                .phone("79898989898")
+                .build();
+    }
 
 
+    @Test
+    public void updateUserTest() {
+        UserRoot user = getTestUser();
+        String oldPassword = user.getPassword();
+        user.setPassword("updatePassword");
 
-
+        given()
+                .body(user)
+                .put("https://fakestoreapi.com/users/" + user.getId())
+                .then()
+                .statusCode(200)
+                .body("password", not(equalTo(oldPassword)));
     }
 }
