@@ -1,10 +1,12 @@
 package tests.juinit5.API.fakestoreapi;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import listener.CustomTpl;
 import models.fakeapiuser.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +23,8 @@ public class UsersRefactoredTests {
     @BeforeAll
     public static void setUp() {
         RestAssured.baseURI = "https://fakestoreapi.com";
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter(),
+                CustomTpl.customLogFilter().withCustomTemplates());
     }
 
     @Test
