@@ -1,5 +1,6 @@
 package tests.juinit5.API.fakestoreapi;
 
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import models.fakeapiuser.Address;
 import models.fakeapiuser.Geolocation;
@@ -7,9 +8,7 @@ import models.fakeapiuser.Name;
 import models.fakeapiuser.UserRoot;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -132,5 +131,29 @@ public class UsersTests {
                 .then()
                 .statusCode(200)
                 .body("password", not(equalTo(oldPassword)));
+    }
+
+    @Test
+    public void deleteUserTest() {
+        given()
+                .delete("https://fakestoreapi.com/users/7")
+                .then()
+                .log().all()
+                .statusCode(200);
+    }
+
+    @Test
+    public void authUserTest() {
+        Map<String, String> authData = new HashMap<>();
+        authData.put("username", "jimmie_k");
+        authData.put("password", "klein*#%*");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(authData)
+                .post("https://fakestoreapi.com/auth/login")
+                .then().log().all()
+                .statusCode(200)
+                .body("token", notNullValue());
     }
 }
