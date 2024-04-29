@@ -1,4 +1,4 @@
-package tests.juinit5.API.fakestoreapi;
+package tests.API.fakestoreapi;
 
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
