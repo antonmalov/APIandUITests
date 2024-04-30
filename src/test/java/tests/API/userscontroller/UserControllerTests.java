@@ -1,4 +1,7 @@
 package tests.API.userscontroller;
+import assertions.AssertableResponse;
+import assertions.Conditions;
+import assertions.GenericAssertableResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -16,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static assertions.Conditions.hasMessage;
+import static assertions.Conditions.hasStatusCode;
 import static io.restassured.RestAssured.given;
 
 public class UserControllerTests {
@@ -81,14 +86,12 @@ public class UserControllerTests {
                 .login("loginAnt" + randomNumber)
                 .build();
 
-        Info info = given().contentType(ContentType.JSON)
+        new AssertableResponse(given().contentType(ContentType.JSON)
                 .body(user)
                 .post("/api/signup")
-                .then()
-                .statusCode(400)
-                .extract().jsonPath().getObject("info", Info.class);
-
-        Assertions.assertEquals("Missing login or password", info.getMessage());
+                .then())
+                .should(hasStatusCode(400))
+                .should(hasMessage("Missing login or password"));
     }
 
     @Test
