@@ -1,7 +1,7 @@
 package tests.API.userscontroller;
 import assertions.AssertableResponse;
+import assertions.Condition;
 import assertions.Conditions;
-import assertions.GenericAssertableResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -14,6 +14,8 @@ import models.usercontroller.JwtAuthData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import services.UserService;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,8 @@ import static assertions.Conditions.hasStatusCode;
 import static io.restassured.RestAssured.given;
 
 public class UserControllerTests {
+
+    public static UserService userService;
     public static Random random;
 
     @BeforeAll
@@ -31,25 +35,24 @@ public class UserControllerTests {
         RestAssured.baseURI = "http://85.192.34.140:8080";
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter(),
                 CustomTpl.customLogFilter().withCustomTemplates());
+        userService = new UserService();
         random = new Random();
+    }
+
+    private FullUser getRandomUser() {
+        int randomNumber = Math.abs(random.nextInt());
+        return FullUser.builder()
+                .login("loginAnt" + randomNumber)
+                .pass("newPass")
+                .build();
     }
 
     @Test
     public void positiveRegisterTest() {
-        int randomNumber = Math.abs(random.nextInt());
-        FullUser user = FullUser.builder()
-                .login("loginAnt" + randomNumber)
-                .pass("newPass")
-                .build();
-
-        Info info = given().contentType(ContentType.JSON)
-                .body(user)
-                .post("/api/signup")
-                .then()
-                .statusCode(201)
-                .extract().jsonPath().getObject("info", Info.class);
-
-        Assertions.assertEquals("User created", info.getMessage());
+        FullUser user = getRandomUser();
+        userService.register(user)
+                .should(hasStatusCode(201))
+                .should(hasMessage("User created"));
     }
 
     @Test
