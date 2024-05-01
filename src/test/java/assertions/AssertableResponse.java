@@ -19,6 +19,10 @@ public class AssertableResponse {
         return response.extract().as(tClass);
     }
 
+    public String asJwt() {
+        return response.extract().jsonPath().getString("token");
+    }
+
     public <T> T as(String jsonPath, Class<T> tClass) {
         return response.extract().jsonPath().getObject(jsonPath, tClass);
     }
