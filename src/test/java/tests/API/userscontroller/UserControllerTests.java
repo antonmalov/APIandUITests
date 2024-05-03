@@ -1,29 +1,18 @@
 package tests.API.userscontroller;
-import assertions.AssertableResponse;
-import assertions.Condition;
-import assertions.Conditions;
 import io.restassured.RestAssured;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.http.ContentType;
 import listener.CustomTpl;
 import models.usercontroller.FullUser;
-import models.usercontroller.Info;
-import models.usercontroller.JwtAuthData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import services.UserService;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
 import static assertions.Conditions.hasMessage;
 import static assertions.Conditions.hasStatusCode;
-import static io.restassured.RestAssured.given;
+
 
 public class UserControllerTests {
 
