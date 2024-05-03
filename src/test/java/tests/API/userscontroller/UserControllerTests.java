@@ -2,8 +2,11 @@ package tests.API.userscontroller;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.response.Response;
 import listener.CustomTpl;
 import models.usercontroller.FullUser;
+import models.usercontroller.Info;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -31,9 +34,20 @@ public class UserControllerTests {
     @Test
     public void positiveRegisterTest() {
         FullUser user = getRandomUser();
-        userService.register(user)
+        Response response = userService.register(user)
                 .should(hasStatusCode(201))
-                .should(hasMessage("User created"));
+                .should(hasMessage("User created"))
+                .asResponse();
+
+        Info info = response.jsonPath().getObject("info", Info.class);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+        softAssertions.assertThat(response.statusCode()).as("Статус код не был 200")
+                .isEqualTo(200);
+
+        softAssertions.assertThat(info.getMessage()).as("Сообщение не верное")
+                .isEqualTo("User created");
+
     }
 
     @Test
