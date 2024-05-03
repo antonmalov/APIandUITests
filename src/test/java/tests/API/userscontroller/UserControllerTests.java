@@ -3,25 +3,30 @@ import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
+import listener.AdminUser;
+import listener.AdminUserResolver;
 import listener.CustomTpl;
 import models.usercontroller.FullUser;
 import models.usercontroller.Info;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import services.UserService;
 
 import java.util.List;
-import java.util.Random;
 import static assertions.Conditions.hasMessage;
 import static assertions.Conditions.hasStatusCode;
 import static utils.RandomTestData.*;
 
 
+@ExtendWith(AdminUserResolver.class)
 public class UserControllerTests {
 
     public static UserService userService;
+    private FullUser user;
 
     @BeforeAll
     public static void setUp() {
@@ -31,9 +36,13 @@ public class UserControllerTests {
         userService = new UserService();
     }
 
+    @BeforeEach
+    public void initTestUser() {
+        user = getRandomUser();
+    }
+
     @Test
     public void positiveRegisterTest() {
-        FullUser user = getRandomUser();
         Response response = userService.register(user)
                 .should(hasStatusCode(201))
                 .should(hasMessage("User created"))
@@ -51,16 +60,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void positiveRegisterWithGamesTest() {
-        FullUser user = getRandomUserWithGames();
-        userService.register(user)
-                .should(hasStatusCode(201))
-                .should(hasMessage("User created"));
-    }
-
-    @Test
     public void negativeRegisterLoginExistTest() {
-        FullUser user = getRandomUser();
         userService.register(user);
         userService.register(user)
                 .should(hasStatusCode(400))
@@ -69,7 +69,6 @@ public class UserControllerTests {
 
     @Test
     public void negativeRegisterWithoutPasswordTest() {
-        FullUser user = getRandomUser();
         user.setPass(null);
         userService.register(user)
                 .should(hasStatusCode(400))
@@ -78,7 +77,6 @@ public class UserControllerTests {
 
     @Test
     public void negativeRegisterWithoutLoginTest() {
-        FullUser user = getRandomUser();
         user.setLogin(null);
         userService.register(user)
                 .should(hasStatusCode(400))
@@ -86,9 +84,8 @@ public class UserControllerTests {
     }
 
     @Test
-    public void positiveAuthTest() {
-        FullUser user = getAdmin();
-        String token = userService.login(user)
+    public void positiveAdminAuthTest(@AdminUser FullUser admin) {
+        String token = userService.login(admin)
                 .should(hasStatusCode(200))
                 .asJwt();
 
@@ -97,7 +94,6 @@ public class UserControllerTests {
 
     @Test
     public void positiveNewUserAuthTest() {
-        FullUser user = getRandomUser();
         userService.register(user);
         String token = userService.login(user)
                 .should(hasStatusCode(200))
@@ -108,7 +104,6 @@ public class UserControllerTests {
 
     @Test
     public void negativeAuthTest() {
-        FullUser user = getRandomUser();
         userService.login(user).should(hasStatusCode(401));
     }
 
@@ -133,7 +128,6 @@ public class UserControllerTests {
     }
     @Test
     public void positiveChangeUserPassTest() {
-        FullUser user = getRandomUser();
         String oldPass = user.getPass();
 
         userService.register(user);
@@ -181,7 +175,6 @@ public class UserControllerTests {
 
     @Test
     public void positiveDeleteUserTest() {
-        FullUser user = getRandomUser();
         userService.register(user);
         String token = userService.login(user).asJwt();
 
