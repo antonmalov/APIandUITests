@@ -8,16 +8,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import services.UserService;
+
 import java.util.List;
 import java.util.Random;
 import static assertions.Conditions.hasMessage;
 import static assertions.Conditions.hasStatusCode;
+import static utils.RandomTestData.*;
 
 
 public class UserControllerTests {
 
     public static UserService userService;
-    public static Random random;
 
     @BeforeAll
     public static void setUp() {
@@ -25,27 +26,19 @@ public class UserControllerTests {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter(),
                 CustomTpl.customLogFilter().withCustomTemplates());
         userService = new UserService();
-        random = new Random();
-    }
-
-    private FullUser getRandomUser() {
-        int randomNumber = Math.abs(random.nextInt());
-        return FullUser.builder()
-                .login("loginAnt" + randomNumber)
-                .pass("newPass")
-                .build();
-    }
-
-    private FullUser getAdmin() {
-        return FullUser.builder()
-                .login("admin")
-                .pass("admin")
-                .build();
     }
 
     @Test
     public void positiveRegisterTest() {
         FullUser user = getRandomUser();
+        userService.register(user)
+                .should(hasStatusCode(201))
+                .should(hasMessage("User created"));
+    }
+
+    @Test
+    public void positiveRegisterWithGamesTest() {
+        FullUser user = getRandomUserWithGames();
         userService.register(user)
                 .should(hasStatusCode(201))
                 .should(hasMessage("User created"));

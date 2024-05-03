@@ -1,6 +1,9 @@
 package models.usercontroller;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GamesItem{
 
 	@JsonProperty("gameId")
@@ -23,7 +28,7 @@ public class GamesItem{
 	private boolean requiredAge;
 
 	@JsonProperty("rating")
-	private int rating;
+	private Integer rating;
 
 	@JsonProperty("description")
 	private String description;
@@ -35,10 +40,10 @@ public class GamesItem{
 	private List<String> tags;
 
 	@JsonProperty("isFree")
-	private boolean isFree;
+	private Boolean isFree;
 
 	@JsonProperty("price")
-	private int price;
+	private Integer price;
 
 	@JsonProperty("dlcs")
 	private List<DlcsItem> dlcs;
@@ -60,7 +65,7 @@ public class GamesItem{
 		return requirements;
 	}
 
-	public boolean isRequiredAge(){
+	public Boolean isRequiredAge(){
 		return requiredAge;
 	}
 
@@ -80,7 +85,7 @@ public class GamesItem{
 		return tags;
 	}
 
-	public boolean isIsFree(){
+	public Boolean isIsFree(){
 		return isFree;
 	}
 
