@@ -39,4 +39,64 @@ public class HardElementsTests {
 
         Assertions.assertEquals(expectedText, actualText);
     }
+
+    @Test
+    public void jsAlertTest() {
+        String expectedTextToAlert = "I am a JS Alert";
+        String expectedResultText = "You successfully clicked an alert";
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+        driver.findElement(By.xpath("//button[text()='Click for JS Alert']")).click();
+        String actualTextToAlert = driver.switchTo().alert().getText();
+        driver.switchTo().alert().accept();
+        String actualResultText = driver.findElement(By.id("result")).getText();
+
+        Assertions.assertEquals(expectedTextToAlert, actualTextToAlert);
+        Assertions.assertEquals(expectedResultText, actualResultText);
+    }
+
+    @Test
+    public void jsConfirmOkTest() {
+        String expectedTextToAlert = "I am a JS Confirm";
+        String expectedResultText = "You clicked: Ok";
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+        driver.findElement(By.xpath("//button[text()='Click for JS Confirm']")).click();
+
+        String actualTextToAlert = driver.switchTo().alert().getText();
+        driver.switchTo().alert().accept();
+        String actualResultText = driver.findElement(By.id("result")).getText();
+
+        Assertions.assertEquals(expectedTextToAlert, actualTextToAlert);
+        Assertions.assertEquals(expectedResultText, actualResultText);
+    }
+
+    @Test
+    public void jsConfirmCancelTest() {
+        String expectedTextToAlert = "I am a JS Confirm";
+        String expectedResultText = "You clicked: Cancel";
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+        driver.findElement(By.xpath("//button[text()='Click for JS Confirm']")).click();
+
+        String actualTextToAlert = driver.switchTo().alert().getText();
+        driver.switchTo().alert().dismiss();
+        String actualResultText = driver.findElement(By.id("result")).getText();
+
+        Assertions.assertEquals(expectedTextToAlert, actualTextToAlert);
+        Assertions.assertEquals(expectedResultText, actualResultText);
+    }
+
+    @Test
+    public void jsPromptTest() {
+        String expectedTextToAlert = "I am a JS prompt";
+        String expectedResultText = "You entered: Input text";
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+        driver.findElement(By.xpath("//button[text()='Click for JS Prompt']")).click();
+
+        String actualTextToAlert = driver.switchTo().alert().getText();
+        driver.switchTo().alert().sendKeys("Input text");
+        driver.switchTo().alert().accept();
+        String actualResultText = driver.findElement(By.id("result")).getText();
+
+        Assertions.assertEquals(expectedTextToAlert, actualTextToAlert);
+        Assertions.assertEquals(expectedResultText, actualResultText);
+    }
 }
