@@ -9,16 +9,26 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.io.File;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SeleniumTests {
-    public WebDriver driver;
+    private WebDriver driver;
+    private String downloadFolder = System.getProperty("user.dir") + File.separator + "build" + File.separator + "downloadFiles";
 
     @BeforeEach
     public void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        Map<String, String> prefs = new HashMap<>();
+        prefs.put("download.default_directory", downloadFolder);
+        options.setExperimentalOption("prefs", prefs);
+
         System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver.exe");
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(options);
         driver.manage().window().setSize(new Dimension(1920, 1080));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
@@ -77,5 +87,35 @@ public class SeleniumTests {
         Assertions.assertTrue(actualEmail.contains(expectedEmail));
         Assertions.assertTrue(actualCurrentAddress.contains(expectedCurrentAddress));
         Assertions.assertTrue(actualPermanentAddress.contains(expectedPermanentAddress));
+    }
+
+    @Test
+    public void uploadFileTest() {
+        driver.get("http://85.192.34.140:8081/");
+        WebElement elementCard = driver.findElement(By.xpath("//div[@class='card-body']//h5[text()='Elements']"));
+        elementCard.click();
+
+        WebElement elementUpAndDown = driver.findElement(By.xpath("//span[text()='Upload and Download']"));
+        elementUpAndDown.click();
+
+        WebElement btnUpload = driver.findElement(By.id("uploadFile"));
+        btnUpload.sendKeys(System.getProperty("user.dir") + "/src/test/resources/threadqa.jpeg");
+
+        WebElement uploadedFakePath = driver.findElement(By.id("uploadedFilePath"));
+
+        Assertions.assertTrue(uploadedFakePath.getText().contains("threadqa.jpeg"));
+    }
+
+    @Test
+    public void downloadFileTest() {
+        driver.get("http://85.192.34.140:8081/");
+        WebElement elementCard = driver.findElement(By.xpath("//div[@class='card-body']//h5[text()='Elements']"));
+        elementCard.click();
+
+        WebElement elementUpAndDown = driver.findElement(By.xpath("//span[text()='Upload and Download']"));
+        elementUpAndDown.click();
+
+        WebElement btnDownload = driver.findElement(By.id("downloadButton"));
+        btnDownload.click();
     }
 }
