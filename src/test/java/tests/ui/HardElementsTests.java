@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -98,5 +99,15 @@ public class HardElementsTests {
 
         Assertions.assertEquals(expectedTextToAlert, actualTextToAlert);
         Assertions.assertEquals(expectedResultText, actualResultText);
+    }
+
+    @Test
+    public void iFrameTest() {
+        driver.get("https://mail.ru/");
+        driver.findElement(By.xpath("//button[@class='resplash-btn resplash-btn_primary resplash-btn_mailbox-big mkiojld__1jdtl7f']")).click();
+
+        WebElement iframe = driver.findElement(By.xpath("//iframe[@class='ag-popup__frame__layout__iframe']"));
+        driver.switchTo().frame(iframe);
+        driver.findElement(By.xpath("//input[@name='username']")).sendKeys("test");
     }
 }
