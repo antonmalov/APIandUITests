@@ -141,4 +141,16 @@ public class HardElementsTests {
         int actualValue = Integer.parseInt(driver.findElement(By.id("sliderValue")).getAttribute("value"));
         Assertions.assertEquals(expectedValue, actualValue);
     }
+
+    @Test
+    public void hoverTest() {
+        driver.get("http://85.192.34.140:8081/");
+        driver.findElement(By.xpath("//div[@class='card-body']//h5[text()='Widgets']")).click();
+
+        driver.findElement(By.xpath("//span[text()='Menu']")).click();
+
+        WebElement menuItemMiddle = driver.findElement(By.xpath("//a[text()='Main Item 2']"));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(menuItemMiddle).build().perform();
+    }
 }
