@@ -4,12 +4,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -27,10 +26,10 @@ public class HardElementsTests {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
     }
 
-    @AfterEach
-    public void tearDown() {
-        driver.close();
-    }
+//    @AfterEach
+//    public void tearDown() {
+//        driver.close();
+//    }
 
     @Test
     public void authTest() {
@@ -109,5 +108,37 @@ public class HardElementsTests {
         WebElement iframe = driver.findElement(By.xpath("//iframe[@class='ag-popup__frame__layout__iframe']"));
         driver.switchTo().frame(iframe);
         driver.findElement(By.xpath("//input[@name='username']")).sendKeys("test");
+    }
+
+    @Test
+    public void sliderDragAndDropTest() {
+        driver.get("http://85.192.34.140:8081/");
+        driver.findElement(By.xpath("//div[@class='card-body']//h5[text()='Widgets']")).click();
+
+        driver.findElement(By.xpath("//span[text()='Slider']")).click();
+
+        WebElement elementSlider = driver.findElement(By.xpath("//input[@type='range']"));
+        Actions actions = new Actions(driver);
+        actions.dragAndDropBy(elementSlider, 60, 0).build().perform();
+    }
+
+    @Test
+    public void sliderTest() {
+        driver.get("http://85.192.34.140:8081/");
+        driver.findElement(By.xpath("//div[@class='card-body']//h5[text()='Widgets']")).click();
+
+        driver.findElement(By.xpath("//span[text()='Slider']")).click();
+
+        WebElement elementSlider = driver.findElement(By.xpath("//input[@type='range']"));
+        int expectedValue = 85;
+        int currentValue = Integer.parseInt(elementSlider.getAttribute("value"));
+        int valueToMove = expectedValue - currentValue;
+
+        for (int i = 0; i < valueToMove; i++) {
+            elementSlider.sendKeys(Keys.ARROW_RIGHT);
+        }
+
+        int actualValue = Integer.parseInt(driver.findElement(By.id("sliderValue")).getAttribute("value"));
+        Assertions.assertEquals(expectedValue, actualValue);
     }
 }
