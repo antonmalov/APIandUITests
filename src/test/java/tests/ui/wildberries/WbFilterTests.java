@@ -1,7 +1,9 @@
 package tests.ui.wildberries;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import tests.ui.wildberries.pages.ItemPage;
 import tests.ui.wildberries.pages.MainPage;
 import tests.ui.wildberries.pages.SearchResultPage;
 
@@ -22,5 +24,12 @@ public class WbFilterTests extends BaseTest {
         resultPage.setMaxPrice(expectedPriceMax);
         resultPage.clickApplyFilter();
         resultPage.openItem();
+
+        ItemPage itemPage = new ItemPage(driver);
+        String actualName = itemPage.getItemName();
+        //Integer actualPrice = itemPage.getItemPrice();
+
+        Assertions.assertTrue(actualName.toLowerCase().contains(expectedItem.toLowerCase()));
+        //Assertions.assertTrue(actualPrice >= expectedPriceMin && actualPrice <= expectedPriceMax);
     }
 }
