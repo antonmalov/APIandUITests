@@ -10,7 +10,7 @@ import tests.ui.wildberries.pages.SearchResultPage;
 public class WbFilterTests extends BaseTest {
 
     @Test
-    public void searchResultTest() {
+    public void searchResultTest() throws InterruptedException {
         String expectedItem = "iphone";
         Integer expectedPriceMin = 36000;
         Integer expectedPriceMax = 60000;

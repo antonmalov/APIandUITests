@@ -14,9 +14,11 @@ public class MainPage {
         this.driver = driver;
     }
 
-    public void searchItem(String item) {
+    public void searchItem(String item) throws InterruptedException {
         driver.findElement(searchField).click();
+        Thread.sleep(1000);
         driver.findElement(searchField).sendKeys(item);
+        Thread.sleep(1000);
         driver.findElement(searchField).sendKeys(Keys.ENTER);
     }
 }
