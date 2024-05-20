@@ -20,8 +20,8 @@ public class BaseTest {
         driver.get("https://www.wildberries.ru/");
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//        driver.close();
-//    }
+    @AfterEach
+    public void tearDown() {
+        driver.close();
+    }
 }

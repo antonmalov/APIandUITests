@@ -3,9 +3,7 @@ package tests.ui.wildberries.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class SearchResultPage {
-
-    private WebDriver driver;
+public class SearchResultPage extends BasePage{
     private final By allFiltersBtn = By.xpath("//button[@class='dropdown-filter__btn dropdown-filter__btn--all']");
     private final By startPrice = By.xpath("//input[@name='startN']");
     private final By endPrice = By.xpath("//input[@name='endN']");
@@ -13,29 +11,36 @@ public class SearchResultPage {
     private final By items = By.xpath("//div[@class='product-card-list']//article");
 
     public SearchResultPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    public void clickFilters() {
+    public SearchResultPage clickFilters() {
         driver.findElement(allFiltersBtn).click();
+        return this;
     }
 
-    public void setMinPrice(Integer minPrice) {
+    public SearchResultPage setMinPrice(Integer minPrice) {
         driver.findElement(startPrice).clear();
         driver.findElement(startPrice).sendKeys(String.valueOf(minPrice));
+        return this;
     }
 
-    public void setMaxPrice(Integer maxPrice) {
+    public SearchResultPage setMaxPrice(Integer maxPrice) {
         driver.findElement(endPrice).clear();
         driver.findElement(endPrice).sendKeys(String.valueOf(maxPrice));
+        return this;
     }
 
-    public void clickApplyFilter() {
+    public SearchResultPage clickApplyFilter() {
         driver.findElement(applyFilterBtn).click();
+        waitForElementUpdated(items);
+        return this;
     }
 
-    public void openItem() {
+    public ItemPage openItem() {
         driver.findElements(items).get(0).click();
+        waitPageLoads();
+        return new ItemPage(driver);
     }
 
 
