@@ -1,6 +1,7 @@
-package tests.ui.wildberries.pages;
+package tests.ui.pageobjectstests.wbpages;
 
 import org.openqa.selenium.*;
+import tests.ui.pageobjectstests.BasePage;
 
 public class ItemPage extends BasePage {
     private final By itemHeaderName = By.xpath("//h1[@class='product-page__title']");

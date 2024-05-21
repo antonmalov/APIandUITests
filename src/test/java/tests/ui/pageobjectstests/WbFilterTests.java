@@ -1,11 +1,18 @@
-package tests.ui.wildberries;
+package tests.ui.pageobjectstests;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tests.ui.wildberries.pages.ItemPage;
-import tests.ui.wildberries.pages.MainPage;
+import tests.ui.pageobjectstests.BaseTest;
+import tests.ui.pageobjectstests.wbpages.ItemPage;
+import tests.ui.pageobjectstests.wbpages.MainPage;
 
 public class WbFilterTests extends BaseTest {
+
+    @BeforeEach
+    public void openSait() {
+        driver.get("https://www.wildberries.ru/");
+    }
 
     @Test
     public void searchResultTest() throws InterruptedException {

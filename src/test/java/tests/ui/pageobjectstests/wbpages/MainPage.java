@@ -1,17 +1,18 @@
-package tests.ui.wildberries.pages;
+package tests.ui.pageobjectstests.wbpages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import tests.ui.pageobjectstests.BasePage;
 
-public class MainPage extends BasePage{
+public class MainPage extends BasePage {
     private final By searchField = By.id("searchInput");
     private final By cartBtn = By.xpath("//a[@data-wba-header-name='Cart']");
     private final By loginBtn = By.xpath("//a[@data-wba-header-name='Login']");
 
     public MainPage(WebDriver driver) {
         super(driver);
-        waitPageLoads();
+        waitPageLoadsWb();
     }
 
     public SearchResultPage searchItem(String item) throws InterruptedException {

@@ -1,9 +1,10 @@
-package tests.ui.wildberries.pages;
+package tests.ui.pageobjectstests.wbpages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import tests.ui.pageobjectstests.BasePage;
 
-public class SearchResultPage extends BasePage{
+public class SearchResultPage extends BasePage {
     private final By allFiltersBtn = By.xpath("//button[@class='dropdown-filter__btn dropdown-filter__btn--all']");
     private final By startPrice = By.xpath("//input[@name='startN']");
     private final By endPrice = By.xpath("//input[@name='endN']");
@@ -39,7 +40,7 @@ public class SearchResultPage extends BasePage{
 
     public ItemPage openItem() {
         driver.findElements(items).get(0).click();
-        waitPageLoads();
+        waitPageLoadsWb();
         return new ItemPage(driver);
     }
 
