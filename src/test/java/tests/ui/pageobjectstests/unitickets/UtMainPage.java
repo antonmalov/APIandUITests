@@ -3,6 +3,7 @@ package tests.ui.pageobjectstests.unitickets;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import tests.ui.pageobjectstests.BasePage;
 
 public class UtMainPage extends BasePage {
@@ -17,12 +18,14 @@ public class UtMainPage extends BasePage {
     private final By searchBtn = By.xpath("//div[@class='search_btn']");
     public UtMainPage(WebDriver driver) {
         super(driver);
+        wait.until(ExpectedConditions.presenceOfElementLocated(cityFromField));
+        wait.until(ExpectedConditions.elementToBeClickable(searchBtn));
     }
 
     public UtMainPage setCityFrom(String city) {
-        driver.findElement(cityFromField).click();
         driver.findElement(cityFromField).clear();
         driver.findElement(cityFromField).sendKeys(city);
+        driver.findElement(cityFromField).click();
         waitForTextPresentedInList(listOfCityFrom, city).click();
         return this;
     }
@@ -37,6 +40,24 @@ public class UtMainPage extends BasePage {
     private WebElement getDay(int day) {
         By dayLocator = By.xpath(String.format(dayInCalendar, day));
         return driver.findElement(dayLocator);
+    }
+
+    public UtMainPage setDayForward(int day) {
+        driver.findElement(dateForward).click();
+        getDay(day).click();
+        return this;
+    }
+
+    public UtMainPage setDayBack(int day) {
+        driver.findElement(dateBack).click();
+        wait.until(ExpectedConditions.elementToBeClickable(getDay(day)));
+        getDay(day).click();
+        return this;
+    }
+
+    public UtSearchPage search() {
+        driver.findElement(searchBtn).click();
+        return new UtSearchPage(driver);
     }
 
 }
