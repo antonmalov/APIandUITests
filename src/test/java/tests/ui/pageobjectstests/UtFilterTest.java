@@ -20,6 +20,7 @@ public class UtFilterTest extends BaseTest {
         mainPage.setCityFrom("Казань")
                 .setCityTo("Дубай")
                 .setDayForward(expectedDayForward)
-                .setDayBack(expectedDayBack);
+                .setDayBack(expectedDayBack)
+                .search();
     }
 }
