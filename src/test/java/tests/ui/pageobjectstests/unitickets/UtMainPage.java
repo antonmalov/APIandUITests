@@ -45,12 +45,11 @@ public class UtMainPage extends BasePage {
     public UtMainPage setDayForward(int day) {
         driver.findElement(dateForward).click();
         getDay(day).click();
+        wait.until(ExpectedConditions.invisibilityOf(getDay(day)));
         return this;
     }
 
     public UtMainPage setDayBack(int day) {
-        driver.findElement(dateBack).click();
-        wait.until(ExpectedConditions.elementToBeClickable(getDay(day)));
         getDay(day).click();
         return this;
     }
