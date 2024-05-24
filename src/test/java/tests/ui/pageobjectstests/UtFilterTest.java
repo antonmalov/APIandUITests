@@ -18,7 +18,7 @@ public class UtFilterTest extends BaseTest {
     @Test
     public void test() {
         int expectedDayForward = 26;
-        int expectedDayBack = 27;
+        int expectedDayBack = 28;
         UtSearchPage searchPage = new UtMainPage(driver)
                 .setCityFrom("Казань")
                 .setCityTo("Дубай")
